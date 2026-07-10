@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Router, HashRouter } from "react-router-dom";
 
 import { Header } from "./components/Header/header";
 import { Home } from "./components/Home/home";
@@ -32,7 +32,7 @@ function App() {
 
   return (
 
-    <BrowserRouter>
+    <HashRouter>
 
       {isLoggedIn && <Header />}
 
@@ -177,7 +177,7 @@ function App() {
 
       </Routes>
 
-    </BrowserRouter>
+    </HashRouter>
 
   );
 }
