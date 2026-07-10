@@ -1,0 +1,27 @@
+{
+  "requirementId": "REQ-1751369700",
+  "customerName": "ABC Industries",
+  "companyName": "ABC Pvt Ltd",
+  "contactPerson": "Rahul",
+  "mobile": "9876543210",
+  "email": "abc@gmail.com",
+  "source": "Website",
+  "status": "New",
+  "requirementPoints": [
+    {
+      "id": 1751369700,
+      "point": "User Login Module",
+      "createdDate": "01/07/2026"
+    },
+    {
+      "id": 1751369710,
+      "point": "Inventory Management",
+      "createdDate": "01/07/2026"
+    },
+    {
+      "id": 1751369720,
+      "point": "GST Billing",
+      "createdDate": "01/07/2026"
+    }
+  ]
+}
