@@ -12,6 +12,10 @@ export function Header() {
   const handleProfile = () => setOpenProfile(!openProfile);
   const user = useSelector((state) => state.auth.user);
 
+  const [openLogout, setOpenLogout] = useState(false);
+
+  const handleLogoutDialog = () => setOpenLogout(!openLogout);
+
   const [openNav, setOpenNav] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -105,7 +109,7 @@ export function Header() {
                 />
               </button>
 
-              <Button color="red" onClick={handleLogout}>
+              <Button color="red" onClick={handleLogoutDialog}>
                 Logout
               </Button>
             </>
@@ -170,71 +174,167 @@ export function Header() {
           </div>
         </div>
       </Collapse>
-            
 
-      <Dialog open={openProfile} handler={handleProfile} size="sm">
-        <DialogHeader className="justify-center">
-          Employee Profile
-        </DialogHeader>
 
-        <DialogBody divider>
-          <div className="flex flex-col items-center">
+      <Dialog
+        open={openProfile}
+        handler={handleProfile}
+        size="xs"
+        className="bg-white rounded-[2rem] shadow-2xl overflow-hidden font-sans border-0"
+      >
+        {/* We use padding-0 on the body to allow the header banner to stretch edge-to-edge */}
+        <DialogBody className="p-0">
 
-            <Avatar
-              size="xxl"
-              src={
-                user?.photo ||
-                "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-              }
-            />
+          {/* Decorative Header Banner */}
+          <div className="relative h-32 w-full bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-500 overflow-hidden">
+            {/* Abstract Background pattern for the banner */}
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white via-transparent to-transparent blur-md"></div>
 
-            <h2 className="mt-4 text-xl font-bold">
+            {/* Close Button at top right */}
+            <button
+              onClick={handleProfile}
+              className="absolute top-4 right-4 p-2 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-md transition-all duration-200 z-10"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="white" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="flex flex-col items-center px-8 pb-8">
+
+            {/* Overlapping Avatar with Shadow Glow */}
+            <div className="-mt-16 mb-4 relative z-10">
+              {/* Soft shadow glow behind the avatar */}
+              <div className="absolute inset-0 bg-indigo-500 rounded-full blur-md opacity-40 translate-y-2"></div>
+              <Avatar
+                size="xxl"
+                src={user?.photo || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"}
+                alt="Employee Profile"
+                className="relative border-4 border-white shadow-xl bg-white w-28 h-28 object-cover"
+              />
+            </div>
+
+            {/* Name & Designation */}
+            <h2 className="text-2xl font-black text-slate-800 text-center mb-1 tracking-tight">
               {user?.firstName} {user?.lastName}
             </h2>
-
-            <p className="text-gray-500">
-              {user?.designation}
+            <p className="text-indigo-500 font-bold text-xs tracking-widest uppercase mb-6 text-center">
+              {user?.designation || "Team Member"}
             </p>
 
-            <div className="w-full mt-6 space-y-3">
+            {/* Structured Details Card */}
+            <div className="w-full bg-slate-50/80 border border-slate-100 rounded-2xl p-5 space-y-4 shadow-inner">
 
-              <div className="flex justify-between">
-                <span className="font-semibold">Staff ID</span>
-                <span>{user?.staffId}</span>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Staff ID</span>
+                <span className="text-sm font-extrabold text-slate-800">{user?.staffId || "N/A"}</span>
               </div>
 
-              <div className="flex justify-between">
-                <span className="font-semibold">Department</span>
-                <span>{user?.department}</span>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Department</span>
+                <span className="text-sm font-bold text-slate-700">{user?.department || "N/A"}</span>
               </div>
 
-              <div className="flex justify-between">
-                <span className="font-semibold">Email</span>
-                <span>{user?.email}</span>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Email</span>
+                <span className="text-sm font-bold text-slate-700 truncate max-w-[150px]">{user?.email || "N/A"}</span>
               </div>
 
-              <div className="flex justify-between">
-                <span className="font-semibold">Mobile</span>
-                <span>{user?.mobile}</span>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Mobile</span>
+                <span className="text-sm font-bold text-slate-700">{user?.mobile || "N/A"}</span>
               </div>
 
-              <div className="flex justify-between">
-                <span className="font-semibold">Role</span>
-                <span>{user?.role}</span>
+              {/* Role Badge - Visually separated from the rest */}
+              <div className="flex items-center justify-between pt-3 mt-1 border-t border-slate-200/60">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">System Role</span>
+                <span className="px-3 py-1 rounded-lg bg-indigo-100 text-indigo-700 text-[10px] font-black uppercase tracking-widest">
+                  {user?.role || "User"}
+                </span>
               </div>
 
             </div>
+
+            {/* Bottom Close Button */}
+            <Button
+              variant="text"
+              color="blue-gray"
+              className="mt-6 w-full rounded-xl font-bold tracking-wide hover:bg-slate-100 transition-colors"
+              onClick={handleProfile}
+            >
+              Dismiss
+            </Button>
+
           </div>
         </DialogBody>
+      </Dialog>
 
-        <DialogFooter>
+
+      <Dialog
+        open={openLogout}
+        handler={handleLogoutDialog}
+        size="xs"
+        className="rounded-2xl"
+      >
+        <DialogHeader className="flex flex-col items-center gap-3 pb-2">
+
+          <div className="h-16 w-16 rounded-full bg-red-100 flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-8 w-8 text-red-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17 16l4-4m0 0l-4-4m4 4H9m4 8H7a2 2 0 01-2-2V6a2 2 0 012-2h6"
+              />
+            </svg>
+          </div>
+
+          <div className="text-center">
+            <h2 className="text-xl font-bold text-gray-800">
+              Logout
+            </h2>
+
+            <p className="text-sm text-gray-500 mt-1">
+              Are you sure you want to logout from
+              <br />
+              <span className="font-semibold text-black">
+                DEENOVA DIGITAL
+              </span>
+              ?
+            </p>
+          </div>
+
+        </DialogHeader>
+
+        <DialogFooter className="flex justify-center gap-3">
+
           <Button
-            variant="text"
-            color="red"
-            onClick={handleProfile}
+            variant="outlined"
+            color="blue-gray"
+            onClick={handleLogoutDialog}
+            className="rounded-lg px-6"
           >
-            Close
+            Cancel
           </Button>
+
+          <Button
+            color="red"
+            className="rounded-lg px-6 shadow-lg"
+            onClick={() => {
+              handleLogoutDialog();
+              handleLogout();
+            }}
+          >
+            Yes, Logout
+          </Button>
+
         </DialogFooter>
       </Dialog>
     </header>

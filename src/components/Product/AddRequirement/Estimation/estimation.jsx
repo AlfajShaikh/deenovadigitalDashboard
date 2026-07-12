@@ -147,10 +147,10 @@ export function Estimation() {
 
 
     useEffect(() => {
-    if (success && estimate) {
-        dispatch(getEstimateByRequirementId(estimate.estimateId));
-    }
-}, [success, estimate, dispatch]);
+        if (success && estimate) {
+            dispatch(getEstimateByRequirementId(estimate.estimateId));
+        }
+    }, [success, estimate, dispatch]);
 
     const addRule = (reqId) => {
         setCustomerRules(prev => ({
@@ -430,17 +430,17 @@ export function Estimation() {
                                         <div className="flex flex-wrap gap-4 mb-6">
                                             <div className="w-24">
                                                 <Input type="number" label="Months" value={settings.months} color="blue"
-                                                    containerProps={{ className: "min-w-6" }}
+                                                    containerProps={{ className: "min-w-2" }}
                                                     onChange={(e) => setProjectSettings(prev => ({ ...prev, [reqId]: { ...settings, months: Number(e.target.value) } }))} />
                                             </div>
                                             <div className="w-28">
                                                 <Input type="number" label="Work Days" value={settings.workingDays} color="blue"
-                                                    containerProps={{ className: "min-w-6" }}
+                                                    containerProps={{ className: "min-w-2" }}
                                                     onChange={(e) => setProjectSettings(prev => ({ ...prev, [reqId]: { ...settings, workingDays: Number(e.target.value) } }))} />
                                             </div>
                                             <div className="w-24">
                                                 <Input type="number" label="Hrs/Day" value={settings.workingHours} color="blue"
-                                                    containerProps={{ className: "min-w-6" }}
+                                                    containerProps={{ className: "min-w-2" }}
                                                     onChange={(e) => setProjectSettings(prev => ({ ...prev, [reqId]: { ...settings, workingHours: Number(e.target.value) } }))} />
                                             </div>
                                         </div>
@@ -499,21 +499,21 @@ export function Estimation() {
                                                     </div>
 
                                                     {/* Fixed tight widths for number inputs */}
-                                                    <div className="w-24">
+                                                    <div className="min-w-2">
                                                         <Input type="number" label="Days" value={rule.days}
-                                                            containerProps={{ className: "min-w-10" }}
+                                                            containerProps={{ className: "min-w-2" }}
                                                             onChange={(e) => updateRule(reqId, index, "days", Number(e.target.value))} />
                                                     </div>
 
                                                     <div className="w-24">
                                                         <Input type="number" label="Hrs/Day" value={rule.hoursPerDay}
-                                                            containerProps={{ className: "min-w-10" }}
+                                                            containerProps={{ className: "min-w-2" }}
                                                             onChange={(e) => updateRule(reqId, index, "hoursPerDay", Number(e.target.value))} />
                                                     </div>
 
                                                     <div className="w-28">
                                                         <Input label="Total Hrs" value={rule.hours} readOnly className="bg-gray-100 font-bold"
-                                                            containerProps={{ className: "min-w-10" }} />
+                                                            containerProps={{ className: "min-w-2" }} />
                                                     </div>
 
                                                     <div className="flex-shrink-0">
