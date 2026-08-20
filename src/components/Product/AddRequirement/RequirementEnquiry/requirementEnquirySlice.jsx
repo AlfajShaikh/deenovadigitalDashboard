@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createRequirementEnquiryAPI, deleteRequirementEnquiryAPI, getAllRequirementEnquiryAPI, updateRequirementEnquiryAPI } from "./requirementEnquiryApi";
+import { createNoteAPI, createRequirementEnquiryAPI, deleteNoteAPI, deleteRequirementEnquiryAPI, getAllNotesAPI, getAllRequirementEnquiryAPI, updateNoteAPI, updateRequirementEnquiryAPI } from "./requirementEnquiryApi";
 
 
 // Create
@@ -60,11 +60,71 @@ export const getAllRequirementEnquiry = createAsyncThunk(
     }
 );
 
+
+
+// CREATE
+export const createNote = createAsyncThunk(
+  "notes/create",
+  async (data, thunkAPI) => {
+    try {
+      return await createNoteAPI(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data || error.message
+      );
+    }
+  }
+);
+
+export const getAllNotes = createAsyncThunk(
+  "notes/getAll",
+  async (_, thunkAPI) => {
+    try {
+      return await getAllNotesAPI();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data || error.message
+      );
+    }
+  }
+);
+
+// UPDATE
+export const updateNote = createAsyncThunk(
+  "notes/update",
+  async ({ noteId, data }, thunkAPI) => {
+    try {
+      return await updateNoteAPI(noteId, data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data || error.message
+      );
+    }
+  }
+);
+
+// DELETE
+export const deleteNote = createAsyncThunk(
+  "notes/delete",
+  async (noteId, thunkAPI) => {
+    try {
+      await deleteNoteAPI(noteId);
+      return noteId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data || error.message
+      );
+    }
+  }
+);
+
+
 const initialState = {
     loading: false,
     success: false,
     error: null,
     enquiryList: [],
+    notes: [],
 };
 
 const requirementEnquirySlice = createSlice({
@@ -137,8 +197,66 @@ const requirementEnquirySlice = createSlice({
                     item => item.requirementId !== action.payload
                 );
 
-            })
-            ;
+            }).addCase(createNote.pending, (state) => {
+        state.loading = true;
+      })
+
+      .addCase(createNote.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+    if (action.payload.data) {
+    state.notes.unshift(action.payload.data);
+}
+      })
+
+      .addCase(createNote.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // GET
+      .addCase(getAllNotes.pending, (state) => {
+        state.loading = true;
+      })
+
+      .addCase(getAllNotes.fulfilled, (state, action) => {
+        state.loading = false;
+        state.notes = action.payload.data;
+      })
+
+      .addCase(getAllNotes.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // UPDATE
+      .addCase(updateNote.pending, (state) => {
+        state.loading = true;
+      })
+
+      .addCase(updateNote.fulfilled, (state, action) => {
+        state.loading = false;
+
+        const index = state.notes.findIndex(
+          item => item.noteId === action.payload.data.noteId
+        );
+
+        if (index !== -1) {
+          state.notes[index] = action.payload.data;
+        }
+      })
+
+      .addCase(updateNote.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // DELETE
+      .addCase(deleteNote.fulfilled, (state, action) => {
+        state.notes = state.notes.filter(
+          item => item.noteId !== action.payload
+        );
+      });;
     },
 });
 

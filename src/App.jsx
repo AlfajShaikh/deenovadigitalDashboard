@@ -19,6 +19,7 @@ import { SendPayments } from "./components/Payments/SendPayments/sendPayments";
 import { PaymentHistory } from "./components/Payments/PaymentHistory/paymentHistory";
 import { Approval } from "./components/Payments/Approval/approval";
 import { Estimation } from "./components/Product/AddRequirement/Estimation/estimation";
+import { Contact } from "./components/Contact/contact";
 
 
 
@@ -61,6 +62,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Product />
+            </ProtectedRoute>
+          }
+        />
+
+          <Route
+          path="/contact"
+          element={
+            <ProtectedRoute>
+              <Contact />
             </ProtectedRoute>
           }
         />

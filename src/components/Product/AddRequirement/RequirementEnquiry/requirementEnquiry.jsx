@@ -15,12 +15,12 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createRequirementEnquiry, getAllRequirementEnquiry } from "./requirementEnquirySlice";
 import { ShowEnquiry } from "./ShowEnquiry/showEnquiry";
+import { Notes } from "./Notes/notes";
 
 export function RequirementEnquiry() {
     const [showNoteBox, setShowNoteBox] = useState(false);
     const [showEnquiryDialog, setShowEnquiryDialog] = useState(false);
 
-    const [notes, setNotes] = useState([]);
 
     const dispatch = useDispatch();
 
@@ -30,24 +30,7 @@ export function RequirementEnquiry() {
 
     const [currentNote, setCurrentNote] = useState("");
 
-    const addNote = () => {
-        if (!currentNote.trim()) return;
 
-        setNotes([
-            {
-                id: Date.now(),
-                text: currentNote,
-                date: new Date().toLocaleString(),
-            },
-            ...notes,
-        ]);
-
-        setCurrentNote("");
-    };
-
-    const deleteNote = (id) => {
-        setNotes(notes.filter((note) => note.id !== id));
-    };
 
     const [requirement, setRequirement] = useState({
         requirementId: `REQ-${Date.now()}`,
@@ -70,24 +53,24 @@ export function RequirementEnquiry() {
         },
     ]);
 
-   const handlePointChange = (id, value) => {
-    setRequirementPoints((prev) =>
-        prev.map((item) =>
-            item.id === id ? { ...item, point: value } : item
-        )
-    );
-};
+    const handlePointChange = (id, value) => {
+        setRequirementPoints((prev) =>
+            prev.map((item) =>
+                item.id === id ? { ...item, point: value } : item
+            )
+        );
+    };
 
-  const addRequirementPoint = () => {
-    setRequirementPoints((prev) => [
-        ...prev,
-        {
-            id: Date.now(),
-            point: "",
-            createdDate: new Date().toLocaleDateString(),
-        },
-    ]);
-};
+    const addRequirementPoint = () => {
+        setRequirementPoints((prev) => [
+            ...prev,
+            {
+                id: Date.now(),
+                point: "",
+                createdDate: new Date().toLocaleDateString(),
+            },
+        ]);
+    };
 
     const deleteRequirementPoint = (id) => {
         setRequirementPoints((prev) =>
@@ -148,7 +131,7 @@ export function RequirementEnquiry() {
                                 color="amber"
                                 onClick={() => setShowNoteBox(true)}
                             >
-                                📝 Notes ({notes.length})
+                                📝 Notes
                             </Button>
 
                             <Button
@@ -361,113 +344,7 @@ export function RequirementEnquiry() {
                 </CardBody>
 
             </Card>
-            <Dialog
-                open={showNoteBox}
-                handler={() => setShowNoteBox(false)}
-                size="lg"
-            >
-                <DialogHeader className="flex justify-between">
-                    <Typography variant="h5">
-                        📝 Important Notes
-                    </Typography>
 
-                    <Button
-                        variant="text"
-                        color="red"
-                        onClick={() => setShowNoteBox(false)}
-                    >
-                        ✕
-                    </Button>
-                </DialogHeader>
-
-                <DialogBody divider>
-
-                    <div className="flex gap-3 mb-5">
-
-                        <Input
-                            label="Write an important note..."
-                            value={currentNote}
-                            onChange={(e) => setCurrentNote(e.target.value)}
-                        />
-
-                        <Button
-                            color="green"
-                            onClick={addNote}
-                        >
-                            Add
-                        </Button>
-
-                    </div>
-
-                    <div className="space-y-3 max-h-[400px] overflow-y-auto">
-
-                        {notes.length === 0 && (
-                            <Typography color="gray">
-                                No notes added.
-                            </Typography>
-                        )}
-
-                        {notes.map((note, index) => (
-
-                            <Card key={note.id} className="border">
-
-                                <CardBody className="py-3">
-
-                                    <div className="flex justify-between">
-
-                                        <div>
-
-                                            <Typography className="font-semibold">
-                                                Note #{index + 1}
-                                            </Typography>
-
-                                            <Typography className="mt-1">
-                                                {note.text}
-                                            </Typography>
-
-                                            <Typography
-                                                variant="small"
-                                                color="gray"
-                                            >
-                                                {note.date}
-                                            </Typography>
-
-                                        </div>
-
-                                        <Button
-                                            size="sm"
-                                            color="red"
-                                            variant="text"
-                                            onClick={() => deleteNote(note.id)}
-                                        >
-                                            Delete
-                                        </Button>
-
-                                    </div>
-
-                                </CardBody>
-
-                            </Card>
-
-                        ))}
-
-                    </div>
-
-                </DialogBody>
-
-                <DialogFooter>
-
-                    <Button
-                        variant="outlined"
-                        color="red"
-                        onClick={() => setShowNoteBox(false)}
-                    >
-                        Close
-                    </Button>
-
-                </DialogFooter>
-
-            </Dialog>
 
             <Dialog
                 open={showEnquiryDialog}
@@ -502,6 +379,11 @@ export function RequirementEnquiry() {
                     </Button>
                 </DialogFooter>
             </Dialog>
+
+            <Notes
+                open={showNoteBox}
+                handleClose={() => setShowNoteBox(false)}
+            />
         </div>
     );
 }

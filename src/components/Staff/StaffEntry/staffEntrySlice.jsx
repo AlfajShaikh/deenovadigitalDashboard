@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createStaffAPI, deleteStaffAPI, getAllStaffAPI, getStaffByIdAPI, updateStaffAPI } from "./staffEntryApi";
+import { createStaffAPI, deleteStaffAPI, getAllStaffAPI, getStaffByIdAPI, resendOtpAPI, updateStaffAPI, verifyOtpAPI } from "./staffEntryApi";
 
 export const createStaff = createAsyncThunk(
     "staff/create",
@@ -69,6 +69,33 @@ export const deleteStaff = createAsyncThunk(
     }
 );
 
+
+export const verifyOtp = createAsyncThunk(
+    "staff/verifyOtp",
+    async (data, thunkAPI) => {
+        try {
+            return await verifyOtpAPI(data);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(
+                error.response?.data || error.message
+            );
+        }
+    }
+);
+
+export const resendOtp = createAsyncThunk(
+    "staff/resendOtp",
+    async (email, thunkAPI) => {
+        try {
+            return await resendOtpAPI(email);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(
+                error.response?.data || error.message
+            );
+        }
+    }
+);
+
 const initialState = {
     loading: false,
     success: false,
@@ -99,7 +126,9 @@ const staffEntrySlice = createSlice({
             .addCase(createStaff.fulfilled, (state) => {
                 state.loading = false;
                 state.success = true;
+                state.otpVerified = false;
             })
+
 
             .addCase(createStaff.rejected, (state, action) => {
                 console.log(action.payload);
@@ -159,6 +188,32 @@ const staffEntrySlice = createSlice({
                 );
 
                 state.selectedStaff = null;
+            })
+            .addCase(verifyOtp.pending, (state) => {
+                state.loading = true;
+            })
+
+            .addCase(verifyOtp.fulfilled, (state) => {
+                state.loading = false;
+                state.otpVerified = true;
+            })
+
+            .addCase(verifyOtp.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            .addCase(resendOtp.pending, (state) => {
+                state.loading = true;
+            })
+
+            .addCase(resendOtp.fulfilled, (state) => {
+                state.loading = false;
+            })
+
+            .addCase(resendOtp.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
             });
     },
 });

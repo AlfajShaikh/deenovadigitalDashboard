@@ -36,3 +36,24 @@ export const deleteStaffAPI = async (staffId) => {
   );
   return response.data;
 };
+
+
+// VERIFY OTP
+export const verifyOtpAPI = async (data) => {
+  const response = await API.post(
+    "/users/verify-otp",
+    data
+  );
+
+  return response.data;
+};
+
+// RESEND OTP
+export const resendOtpAPI = async (email) => {
+  const response = await API.post(
+    "/users/resend-otp",
+    { email }
+  );
+
+  return response.data;
+};

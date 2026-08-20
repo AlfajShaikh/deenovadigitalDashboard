@@ -5,6 +5,7 @@ import loginReducer from './components/Login/loginSlice'
 import sendPaymentReducer from './components/Payments/SendPayments/sendPaymentsSlice'
 import estimateReducer from './components/Product//AddRequirement/Estimation/estimationSlice'
 import homeReducer from './components/Home/homeSlice'
+import contactReducer from './components/Contact/contactSlice'
 
 
 export const store = configureStore({
@@ -14,7 +15,8 @@ export const store = configureStore({
     requirementEnquiry:requirementEnquiryReducer,
     auth:loginReducer,
     sendPayment:sendPaymentReducer,
-    estimate:estimateReducer
+    estimate:estimateReducer,
+    contact:contactReducer
 
     },
 });

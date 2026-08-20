@@ -6,8 +6,12 @@ import {
     Select,
     Option,
     Button,
+    Dialog,
+    DialogHeader,
+    DialogBody,
+    DialogFooter,
 } from "@material-tailwind/react";
-import { createStaff } from "./staffEntrySlice";
+import { createStaff, verifyOtp } from "./staffEntrySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Imported for navigation
@@ -15,6 +19,9 @@ import { useNavigate } from "react-router-dom"; // Imported for navigation
 export function StaffEntry() {
     const dispatch = useDispatch();
     const navigate = useNavigate(); // Hook initialization
+
+    const [otpOpen,setOtpOpen]=useState(false);
+const [otp,setOtp]=useState("");
 
     const [errors, setErrors] = useState([]);
     const validate = () => {
@@ -120,8 +127,45 @@ export function StaffEntry() {
 
         if (!validate()) return;
 
-        dispatch(createStaff(staff));
+        dispatch(createStaff(staff))
+.then((res)=>{
+
+    if(res.meta.requestStatus==="fulfilled"){
+
+        setOtpOpen(true);
+
+    }
+
+});
     };
+
+    const handleVerifyOtp=()=>{
+
+    dispatch(
+        verifyOtp({
+            email:staff.email,
+            otp,
+        })
+    ).then((res)=>{
+
+        if(res.meta.requestStatus==="fulfilled"){
+
+            alert("Account Verified");
+
+            setOtpOpen(false);
+
+        }
+
+    });
+
+};
+
+
+const handleResendOtp=()=>{
+
+    dispatch(resendOtp(staff.email));
+
+};
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-12 animate-fade-in">
@@ -336,6 +380,53 @@ export function StaffEntry() {
 
                 </div>
             </form>
+
+
+
+            <Dialog
+    open={otpOpen}
+    handler={()=>{}}
+>
+
+    <DialogHeader>
+        Verify Email
+    </DialogHeader>
+
+    <DialogBody>
+
+        <Typography className="mb-4">
+            OTP has been sent to
+            <br />
+            <b>{staff.email}</b>
+        </Typography>
+
+        <Input
+            label="Enter OTP"
+            value={otp}
+            onChange={(e)=>setOtp(e.target.value)}
+        />
+
+    </DialogBody>
+
+    <DialogFooter className="gap-2">
+
+        <Button
+            variant="outlined"
+            onClick={handleResendOtp}
+        >
+            Resend OTP
+        </Button>
+
+        <Button
+            color="green"
+            onClick={handleVerifyOtp}
+        >
+            Verify
+        </Button>
+
+    </DialogFooter>
+
+</Dialog>
         </div>
     );
 }

@@ -136,8 +136,8 @@ export function Home() {
                             </Typography>
                             <Typography className="text-sm font-bold text-gray-500 flex items-center gap-2 group-hover:text-gray-700 transition-colors">
                                 Deenova Digital Workspace
-                                <span className="flex items-center gap-1.5 bg-gradient-to-r from-emerald-400 to-emerald-500 text-white px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm shadow-emerald-500/30">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-white animate-ping"></span>
+                                <span className="flex items-center gap-1.5 bg-gradient-to-r font-bold from-emerald-400 to-emerald-500 text-red-400 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm shadow-emerald-500/30">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-red-400 animate-ping"></span>
                                     Live
                                 </span>
                             </Typography>
